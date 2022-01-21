@@ -408,4 +408,7 @@ enum handler_return platform_irq(struct iframe *frame) {
 }
 
 void platform_fiq(struct iframe *frame);
-void platform_fiq(struct iframe *frame) { PANIC_UNIMPLEMENTED; }
+void platform_fiq(struct iframe *frame) {
+  // TODO: The only possible case for FIQ right now is the timer
+  PANIC_UNIMPLEMENTED_MSG("Enter FIQ");
+}

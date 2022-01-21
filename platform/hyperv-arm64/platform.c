@@ -75,6 +75,7 @@ void platform_early_init(void) {
   arm_gicv3_init();
   arm_generic_timer_init(ARM_GENERIC_TIMER_PHYSICAL_INT, 0);
   uart_init_early();
+  printf("test test test test\n");
 
   while (true) {
   }
