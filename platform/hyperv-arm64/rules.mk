@@ -20,6 +20,7 @@ LK_HEAP_IMPLEMENTATION ?= dlmalloc
 MODULE_SRCS += \
     $(LOCAL_DIR)/debug.c \
     $(LOCAL_DIR)/platform.c \
+    $(LOCAL_DIR)/gicv3.S \
     $(LOCAL_DIR)/gicv3.c \
     $(LOCAL_DIR)/uart.c
 

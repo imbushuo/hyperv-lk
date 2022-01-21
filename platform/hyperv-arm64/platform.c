@@ -24,8 +24,8 @@
 
 #include <gicv3.h>
 #include <platform.h>
-#include <platform/gic.h>
 #include <platform/hv-gen2.h>
+#include <platform/hv-gic.h>
 #include <platform/interrupts.h>
 
 #include "platform_p.h"
@@ -71,6 +71,11 @@ static pmm_arena_t arena = {
 };
 
 void platform_early_init(void) {
+  /* GIC, Timer and then UART */
+  arm_gicv3_init();
+  arm_generic_timer_init(ARM_GENERIC_TIMER_PHYSICAL_INT, 0);
+  uart_init_early();
+
   while (true) {
   }
 }
