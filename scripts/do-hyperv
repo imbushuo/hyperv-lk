@@ -1,0 +1,39 @@
+#!/usr/bin/env bash
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+function HELP {
+    echo "help:"
+    echo "-c cmpctmalloc instead of dlmalloc"
+    echo "-M miniheap instead of dlmalloc"
+    echo "-h for help"
+    exit 1
+}
+
+SMP=1
+SUDO=""
+PROJECT="hyperv-arm64-test"
+DO_CMPCTMALLOC=0
+DO_MINIHEAP=0
+
+while getopts bdhm:cMnt36p:s: FLAG; do
+    case $FLAG in
+        c) DO_CMPCTMALLOC=1;;
+        M) DO_MINIHEAP=1;;
+        h) HELP;;
+        \?)
+            echo unrecognized option
+            HELP
+    esac
+done
+
+shift $((OPTIND-1))
+
+MAKE_VARS=""
+if [ $DO_CMPCTMALLOC == 1 ]; then
+    MAKE_VARS=LK_HEAP_IMPLEMENTATION=cmpctmalloc
+elif [ $DO_MINIHEAP == 1 ]; then
+    MAKE_VARS=LK_HEAP_IMPLEMENTATION=miniheap
+fi
+
+$DIR/make-parallel $MAKE_VARS $PROJECT
