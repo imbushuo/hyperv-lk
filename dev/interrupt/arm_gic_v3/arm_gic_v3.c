@@ -86,11 +86,14 @@ void arm_gicv3_init(uint64_t distributorBase, uint64_t redistributorBase) {
   mGicDistributorBase = distributorBase;
   mGicRedistributorsBase = redistributorBase;
   mGicNumInterrupts = ArmGicGetMaxNumInterrupts(mGicDistributorBase);
+  printf("GICv3: %ld interrupts available\n", mGicNumInterrupts);
 
   // Drive it without compat mode
   MmioOr32(mGicDistributorBase + ARM_GIC_ICDDCR, ARM_GIC_ICDDCR_ARE);
+  printf("GICv3: Configured without compat mode\n");
 
   // Set Interrupt priority
+  printf("GICv3: Reset all interrupt priority\n");
   for (UINTN Index = 0; Index < mGicNumInterrupts; Index++) {
     gicv3_disable_interrupt_source(Index);
 
@@ -100,6 +103,7 @@ void arm_gicv3_init(uint64_t distributorBase, uint64_t redistributorBase) {
   }
 
   // Targets the interrupts to the Primary Cpu
+  printf("GICv3: Targeting all interrupts to this CPU (No MP)\n");
   uint64_t MpId = ARM64_READ_SYSREG(mpidr_el1);
   uint64_t CpuTarget =
       MpId & (ARM_CORE_AFF0 | ARM_CORE_AFF1 | ARM_CORE_AFF2 | ARM_CORE_AFF3);
@@ -123,21 +127,26 @@ void arm_gicv3_init(uint64_t distributorBase, uint64_t redistributorBase) {
   }
 
   // Route the SPIs to the primary CPU. SPIs start at the INTID 32
+  printf("GICv3: Routing SPIs to this CPU (No MP)\n");
   for (UINTN Index = 0; Index < (mGicNumInterrupts - 32); Index++) {
     MmioWrite64(mGicDistributorBase + ARM_GICD_IROUTER + (Index * 8),
                 CpuTarget);
   }
 
   // Set binary point reg to 0x7 (no preemption)
+  printf("GICv3: Disable preemption\n");
   ArmGicV3SetBinaryPointer(0x7);
 
   // Set priority mask reg to 0xff to allow all priorities through
+  printf("GICv3: Setting priorities\n");
   ArmGicV3SetPriorityMask(0xff);
 
   // Enable gic cpu interface
+  printf("GICv3: Enable CPU interface\n");
   ArmGicV3EnableInterruptInterface();
 
   // Enable gic distributor
+  printf("GICv3: Enable GIC distributor\n");
   ArmGicEnableDistributor(mGicDistributorBase);
 }
 

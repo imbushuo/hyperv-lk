@@ -56,8 +56,8 @@ shift $((OPTIND-1))
 
 if [ $DO_64BIT == 1 ]; then
     QEMU="qemu-system-aarch64"
-    CPU="cortex-a57"
-    MACHINE="virt,gic-version=3"
+    CPU="cortex-a53"
+    MACHINE="virt"
     _PROJECT="qemu-virt-arm64-test"
 elif [ $DO_CORTEX_M3 == 1 ]; then
     QEMU="qemu-system-arm"
@@ -111,6 +111,4 @@ elif [ $DO_MINIHEAP == 1 ]; then
     MAKE_VARS=LK_HEAP_IMPLEMENTATION=miniheap
 fi
 
-$DIR/make-parallel $MAKE_VARS $PROJECT &&
-echo $SUDO $QEMU $ARGS $@ &&
-$SUDO $QEMU $ARGS $@
+$DIR/make-parallel $MAKE_VARS $PROJECT

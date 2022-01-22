@@ -9,7 +9,7 @@
 
 #include <platform/qemu-virt.h>
 
-#define GICBASE(n)  (CPUPRIV_BASE_VIRT)
+#define GICBASE(n) (CPUPRIV_BASE_VIRT)
+#define GICRBASE (PERIPHERAL_BASE_VIRT + 0x080A0000)
 #define GICD_OFFSET (0x00000)
 #define GICC_OFFSET (0x10000)
-

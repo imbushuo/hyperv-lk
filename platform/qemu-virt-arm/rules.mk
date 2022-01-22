@@ -11,7 +11,7 @@ endif
 ifeq ($(ARCH),arm)
 ARM_CPU ?= cortex-a15
 endif
-WITH_SMP ?= 1
+WITH_SMP ?= 0
 
 LK_HEAP_IMPLEMENTATION ?= dlmalloc
 
@@ -29,11 +29,17 @@ MODULE_DEPS += \
     lib/cbuf \
     lib/fdtwalk \
     dev/bus/pci \
-    dev/interrupt/arm_gic \
     dev/timer/arm_generic \
     dev/virtio/block \
     dev/virtio/gpu \
-    dev/virtio/net \
+    dev/virtio/net
+
+ifeq ($(GIC_VERSION),2)
+MODULE_DEPS += dev/interrupt/arm_gic
+else
+MODULE_DEPS += dev/interrupt/arm_gic_v3
+GLOBAL_DEFINES += USE_GIC_V3
+endif
 
 GLOBAL_DEFINES += \
     MEMBASE=$(MEMBASE) \

@@ -11,7 +11,13 @@
 #include <lk/debug.h>
 #include <lk/trace.h>
 #include <dev/bus/pci.h>
+
+#ifdef USE_GIC_V3
+#include <dev/interrupt/arm_gic_v3.h>
+#else
 #include <dev/interrupt/arm_gic.h>
+#endif
+
 #include <dev/timer/arm_generic.h>
 #include <dev/uart.h>
 #include <dev/virtio.h>
@@ -119,7 +125,12 @@ static void pciecallback(uint64_t ecam_base, size_t len, uint8_t bus_start, uint
 
 void platform_early_init(void) {
     /* initialize the interrupt controller */
+#ifdef USE_GIC_V3
+    uart_init_early();
+    arm_gicv3_init(GICBASE(0), GICRBASE);
+#else
     arm_gic_init();
+#endif
 
     arm_generic_timer_init(ARM_GENERIC_TIMER_PHYSICAL_INT, 0);
 
