@@ -2,6 +2,7 @@
 #define __IO_HIGH_LEVEL_H__
 
 #include <lk/reg.h>
+#include <private/Shim.h>
 
 #define MmioOr32(Address, OrData) writel(readl((Address)) | (OrData), (Address))
 #define MmioRead32(Address) readl((Address))

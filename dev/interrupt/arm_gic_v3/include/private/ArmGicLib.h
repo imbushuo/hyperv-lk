@@ -9,9 +9,9 @@
 #ifndef ARMGIC_H_
 #define ARMGIC_H_
 
-#include <Base.h>
+#include <private/Base.h>
 
-#include <ArmGicArchLib.h>
+#include <private/ArmGicArchLib.h>
 
 // GIC Distributor
 #define ARM_GIC_ICDDCR 0x000  // Distributor Control Register
@@ -112,6 +112,32 @@
 
 // Bit Mask for
 #define ARM_GIC_ICCIAR_ACKINTID 0x3FF
+
+// In GICv3, there are 2 x 64KB frames:
+// Redistributor control frame + SGI Control & Generation frame
+#define GIC_V3_REDISTRIBUTOR_GRANULARITY                                       \
+  (ARM_GICR_CTLR_FRAME_SIZE + ARM_GICR_SGI_PPI_FRAME_SIZE)
+
+// In GICv4, there are 2 additional 64KB frames:
+// VLPI frame + Reserved page frame
+#define GIC_V4_REDISTRIBUTOR_GRANULARITY                                       \
+  (GIC_V3_REDISTRIBUTOR_GRANULARITY + ARM_GICR_SGI_VLPI_FRAME_SIZE +           \
+   ARM_GICR_SGI_RESERVED_FRAME_SIZE)
+
+#define ISENABLER_ADDRESS(base, offset)                                        \
+  ((base) + ARM_GICR_CTLR_FRAME_SIZE + ARM_GICR_ISENABLER + 4 * (offset))
+
+#define ICENABLER_ADDRESS(base, offset)                                        \
+  ((base) + ARM_GICR_CTLR_FRAME_SIZE + ARM_GICR_ICENABLER + 4 * (offset))
+
+#define IPRIORITY_ADDRESS(base, offset)                                        \
+  ((base) + ARM_GICR_CTLR_FRAME_SIZE + ARM_GIC_ICDIPR + 4 * (offset))
+
+#define ARM_CORE_AFF0 0xFF
+#define ARM_CORE_AFF1 (0xFF << 8)
+#define ARM_CORE_AFF2 (0xFF << 16)
+#define ARM_CORE_AFF3 (0xFFULL << 32)
+#define ARM_GIC_DEFAULT_PRIORITY 0x80
 
 UINTN
 EFIAPI

@@ -14,6 +14,7 @@
 #include <lk/err.h>
 #include <lk/trace.h>
 
+#include <dev/interrupt/arm_gic_v3.h>
 #include <dev/timer/arm_generic.h>
 #include <dev/uart.h>
 
@@ -22,7 +23,6 @@
 #include <kernel/spinlock.h>
 #include <kernel/vm.h>
 
-#include <gicv3.h>
 #include <platform.h>
 #include <platform/hv-gen2.h>
 #include <platform/hv-gic.h>
@@ -72,9 +72,12 @@ static pmm_arena_t arena = {
 
 void platform_early_init(void) {
   /* GIC, Timer and then UART */
-  arm_gicv3_init();
+  arm_gicv3_init(HV_GICD_ADDRESS, HV_GICR_BASE);
   arm_generic_timer_init(ARM_GENERIC_TIMER_PHYSICAL_INT, 0);
   uart_init_early();
+
+  printf("test test test test\n");
+  printf("test test test test\n");
   printf("test test test test\n");
 
   while (true) {

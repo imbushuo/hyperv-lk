@@ -9,7 +9,7 @@
 #ifndef ARM_GIC_ARCH_LIB_H_
 #define ARM_GIC_ARCH_LIB_H_
 
-#include <Shim.h>
+#include <private/Shim.h>
 
 //
 // GIC definitions
@@ -18,9 +18,5 @@ typedef enum {
   ARM_GIC_ARCH_REVISION_2,
   ARM_GIC_ARCH_REVISION_3
 } ARM_GIC_ARCH_REVISION;
-
-ARM_GIC_ARCH_REVISION
-EFIAPI
-ArmGicGetSupportedArchRevision(VOID);
 
 #endif // ARM_GIC_ARCH_LIB_H_

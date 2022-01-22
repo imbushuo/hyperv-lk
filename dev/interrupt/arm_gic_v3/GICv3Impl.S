@@ -6,7 +6,7 @@
 #
 
 #include <lk/asm.h>
-#include <AsmMacroIoLibV8.h>
+#include <private/AsmMacroIoLibV8.h>
 
 .text
 

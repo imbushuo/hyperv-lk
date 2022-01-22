@@ -20,8 +20,6 @@ LK_HEAP_IMPLEMENTATION ?= dlmalloc
 MODULE_SRCS += \
     $(LOCAL_DIR)/debug.c \
     $(LOCAL_DIR)/platform.c \
-    $(LOCAL_DIR)/gicv3.S \
-    $(LOCAL_DIR)/gicv3.c \
     $(LOCAL_DIR)/uart.c
 
 MEMBASE := 0x00000000
@@ -30,7 +28,8 @@ KERNEL_LOAD_OFFSET := 0x04000000 # 64MB
 
 MODULE_DEPS += \
     lib/cbuf \
-    dev/timer/arm_generic
+    dev/timer/arm_generic \
+    dev/interrupt/arm_gic_v3
 
 GLOBAL_DEFINES += \
     MEMBASE=$(MEMBASE) \
