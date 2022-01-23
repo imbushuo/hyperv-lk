@@ -38,9 +38,9 @@
 #error "Only ARM64 is supported"
 #endif
 
-/* Hyper-V has 256MB MMIO */
+/* Hyper-V has 512MB MMIO */
 #define PERIPHERAL_BASE_PHYS (0xE0000000)
-#define PERIPHERAL_BASE_SIZE (0x10000000UL) // 256MB
+#define PERIPHERAL_BASE_SIZE (0x20000000UL) // 512MB
 
 #if ARCH_ARM64
 #define PERIPHERAL_BASE_VIRT (0xffffffffc0000000ULL) // -1GB

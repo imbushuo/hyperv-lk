@@ -72,19 +72,19 @@ static pmm_arena_t arena = {
 
 void platform_early_init(void) {
   /* GIC, Timer and then UART */
+  uart_init_early();
+  printf("Bring up GICv3\n");
   arm_gicv3_init(HV_GICD_ADDRESS, HV_GICR_BASE);
   arm_generic_timer_init(ARM_GENERIC_TIMER_PHYSICAL_INT, 0);
-  uart_init_early();
 
-  printf("test test test test\n");
-  printf("test test test test\n");
-  printf("test test test test\n");
+  /* add the main memory arena */
+  pmm_add_arena(&arena);
 
-  while (true) {
-  }
+  /* hardcoded */
+  LTRACEF("booting %d cpus\n", 1);
 }
 
 void platform_init(void) {
-  while (true) {
-  }
+  uart_init();
+  /* That's all */
 }
