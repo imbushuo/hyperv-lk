@@ -25,10 +25,11 @@
 
 #include <platform.h>
 #include <platform/hv-gen2.h>
-#include <platform/hv-gic.h>
 #include <platform/interrupts.h>
 
 #include "platform_p.h"
+
+extern int psci_call(ulong arg0, ulong arg1, ulong arg2, ulong arg3);
 
 #if WITH_LIB_MINIP
 #include <lib/minip.h>
@@ -91,4 +92,28 @@ void platform_early_init(void) {
 void platform_init(void) {
   uart_init();
   /* That's all */
+}
+
+#define ARM_SMC_ID_PSCI_SYSTEM_OFF 0x84000008
+#define ARM_SMC_ID_PSCI_SYSTEM_RESET 0x84000009
+
+void __NO_RETURN platform_halt(platform_halt_action suggested_action,
+                               platform_halt_reason reason) {
+  switch (suggested_action) {
+  case HALT_ACTION_REBOOT:
+    printf("PSCI call for reset\n");
+    psci_call(ARM_SMC_ID_PSCI_SYSTEM_RESET, 0, 0, 0);
+    break;
+  case HALT_ACTION_SHUTDOWN:
+    printf("PSCI call for power off\n");
+    psci_call(ARM_SMC_ID_PSCI_SYSTEM_OFF, 0, 0, 0);
+    break;
+  }
+
+  // Unless it's halt, we should not reach here
+  printf("HALT: spinning forever... (reason = %d)\n", reason);
+  arch_disable_ints();
+  for (;;) {
+    arch_idle();
+  }
 }
