@@ -356,6 +356,11 @@ arm_reset:
     cbnz    tmp2, .L__bss_loop
 .L__bss_loop_done:
 
+    mov x0, #0
+    mov x1, #0
+    mov x2, #0
+    mov x3, #0
+    mov x29, #0x114 /* Hyper-V doesn't clean up FP */
     bl  lk_main
     b   .
 

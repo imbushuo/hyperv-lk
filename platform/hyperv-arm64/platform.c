@@ -75,7 +75,11 @@ void platform_early_init(void) {
   uart_init_early();
   printf("Bring up GICv3\n");
   arm_gicv3_init(HV_GICD_ADDRESS, HV_GICR_BASE);
-  arm_generic_timer_init(ARM_GENERIC_TIMER_PHYSICAL_INT, 0);
+
+  /* Hyper-V UEFI still uses stimer0, we need to bring this up or it will blow
+   * up. And we use the virt timer */
+  printf("Bring up Timer\n");
+  arm_generic_timer_init(ARM_GENERIC_TIMER_VIRTUAL_INT, 0);
 
   /* add the main memory arena */
   pmm_add_arena(&arena);

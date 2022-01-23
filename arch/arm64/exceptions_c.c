@@ -154,8 +154,6 @@ void arm64_sync_exception(struct arm64_iframe_long *iframe) {
            BIT(iss, 6) ? "Write" : "Read", iframe->elr, far, iss,
            BITS(iss, 5, 0));
     print_fault_msg(BITS(iss, 5, 0));
-    while (true) {
-    }
     break;
   }
   case 0b111100: {
